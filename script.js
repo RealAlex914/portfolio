@@ -266,7 +266,14 @@ const ACTIVITIES = [
 let hudStart = 0, hudLastSec = -1, hudIdx = -1;
 
 function startHud() {
-  hudStart = performance.now();
+  // arrival time is stored so the timer survives refreshes / return visits
+  let arrived = NaN;
+  try { arrived = parseInt(localStorage.getItem("alexArrivedAt"), 10); } catch (e) {}
+  if (!arrived || Number.isNaN(arrived) || arrived > Date.now()) {
+    arrived = Date.now();                       // first visit (or bad value) — start now
+    try { localStorage.setItem("alexArrivedAt", String(arrived)); } catch (e) {}
+  }
+  hudStart = arrived;
   hudLastSec = -1;
   hudIdx = -1;
   hud.classList.add("show");
@@ -279,14 +286,15 @@ function stopHud() {
 }
 
 function fmtTime(sec) {
-  const m = String(Math.floor(sec / 60)).padStart(2, "0");
+  const h = Math.floor(sec / 3600);
+  const m = String(Math.floor((sec % 3600) / 60)).padStart(2, "0");
   const s = String(sec % 60).padStart(2, "0");
-  return `${m}:${s}`;
+  return h > 0 ? `${h}:${m}:${s}` : `${m}:${s}`;   // roll into H:MM:SS past an hour
 }
 
 function updateHud() {
   if (!hudStart) return;
-  const elapsed = (performance.now() - hudStart) / 1000;
+  const elapsed = (Date.now() - hudStart) / 1000;   // wall-clock, so it persists across refreshes
   const sec = Math.floor(elapsed);
   if (sec === hudLastSec) return; // only touch the DOM once per second
   hudLastSec = sec;
