@@ -263,17 +263,28 @@ const ACTIVITIES = [
   { label: "songs played", rate: 0.05 },
   { label: "bugs squashed", rate: 0.08 },
 ];
-let hudStart = 0, hudLastSec = -1, hudIdx = -1;
+// Tracks only ACTIVE time on the page: it accumulates seconds while the tab is
+// open and visible, pauses when you leave/hide/close, and resumes from the stored
+// total, so time spent away (offline or on another tab) never inflates it.
+const HUD_KEY = "alexTimeSpent";
+let hudBase = 0;            // active seconds banked from previous sessions
+let hudSessionStart = 0;    // Date.now() the current running session began (0 = paused)
+let hudActive = false, hudLastSec = -1, hudIdx = -1;
+
+function hudElapsed() {
+  return hudBase + (hudSessionStart ? (Date.now() - hudSessionStart) / 1000 : 0);
+}
+function hudSave() {
+  try { localStorage.setItem(HUD_KEY, String(hudElapsed())); } catch (e) {}
+}
 
 function startHud() {
-  // arrival time is stored so the timer survives refreshes / return visits
-  let arrived = NaN;
-  try { arrived = parseInt(localStorage.getItem("alexArrivedAt"), 10); } catch (e) {}
-  if (!arrived || Number.isNaN(arrived) || arrived > Date.now()) {
-    arrived = Date.now();                       // first visit (or bad value) — start now
-    try { localStorage.setItem("alexArrivedAt", String(arrived)); } catch (e) {}
-  }
-  hudStart = arrived;
+  try { localStorage.removeItem("alexArrivedAt"); } catch (e) {}   // drop the old wall-clock key
+  let saved = NaN;
+  try { saved = parseFloat(localStorage.getItem(HUD_KEY)); } catch (e) {}
+  hudBase = (isFinite(saved) && saved > 0) ? saved : 0;   // resume from banked active time
+  hudSessionStart = Date.now();
+  hudActive = true;
   hudLastSec = -1;
   hudIdx = -1;
   hud.classList.add("show");
@@ -282,8 +293,23 @@ function startHud() {
 function stopHud() {
   hud.classList.remove("show");
   hud.setAttribute("aria-hidden", "true");
-  hudStart = 0;
+  hudSave();
+  hudActive = false;
+  hudSessionStart = 0;
 }
+
+// pause the clock when the tab is hidden/closed; resume when it's visible again
+document.addEventListener("visibilitychange", () => {
+  if (!hudActive) return;
+  if (document.hidden) {
+    hudBase = hudElapsed();     // bank what we've counted so far
+    hudSave();
+    hudSessionStart = 0;        // stop counting while hidden
+  } else if (!hudSessionStart) {
+    hudSessionStart = Date.now();   // resume only if currently paused
+  }
+});
+window.addEventListener("pagehide", hudSave);
 
 function fmtTime(sec) {
   const h = Math.floor(sec / 3600);
@@ -293,8 +319,8 @@ function fmtTime(sec) {
 }
 
 function updateHud() {
-  if (!hudStart) return;
-  const elapsed = (Date.now() - hudStart) / 1000;   // wall-clock, so it persists across refreshes
+  if (!hudActive || !hudSessionStart) return;   // not started, or paused (tab hidden)
+  const elapsed = hudElapsed();
   const sec = Math.floor(elapsed);
   if (sec === hudLastSec) return; // only touch the DOM once per second
   hudLastSec = sec;
@@ -311,6 +337,7 @@ function updateHud() {
     );
   }
   hudCount.textContent = Math.max(0, Math.floor(elapsed * ACTIVITIES[hudIdx].rate));
+  hudSave();   // persist the running total each second, so leaving keeps it
 }
 
 /* ---------- résumé version switcher ---------- */
