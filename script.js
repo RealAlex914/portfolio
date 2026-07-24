@@ -267,8 +267,10 @@ const ACTIVITIES = [
 // open and visible, pauses when you leave/hide/close, and resumes from the stored
 // total, so time spent away (offline or on another tab) never inflates it.
 const HUD_KEY = "alexTimeSpent";
+const HUD_IDLE_MS = 3000;   // pause the clock after this long without scrolling
 let hudBase = 0;            // active seconds banked from previous sessions
 let hudSessionStart = 0;    // Date.now() the current running session began (0 = paused)
+let hudIdleTimer = 0;
 let hudActive = false, hudLastSec = -1, hudIdx = -1;
 
 function hudElapsed() {
@@ -277,39 +279,52 @@ function hudElapsed() {
 function hudSave() {
   try { localStorage.setItem(HUD_KEY, String(hudElapsed())); } catch (e) {}
 }
+function hudPause() {              // bank the running total and stop the clock
+  if (hudSessionStart) {
+    hudBase = hudElapsed();
+    hudSave();
+    hudSessionStart = 0;
+  }
+}
+// called on any active engagement (scroll / move / key): run the clock, re-arm idle pause
+function hudPing() {
+  if (!hudActive || document.hidden) return;
+  if (!hudSessionStart) hudSessionStart = Date.now();   // resume if paused
+  clearTimeout(hudIdleTimer);
+  hudIdleTimer = setTimeout(hudPause, HUD_IDLE_MS);
+}
 
 function startHud() {
   try { localStorage.removeItem("alexArrivedAt"); } catch (e) {}   // drop the old wall-clock key
   let saved = NaN;
   try { saved = parseFloat(localStorage.getItem(HUD_KEY)); } catch (e) {}
   hudBase = (isFinite(saved) && saved > 0) ? saved : 0;   // resume from banked active time
-  hudSessionStart = Date.now();
+  hudSessionStart = 0;        // starts paused; engagement drives the clock
   hudActive = true;
   hudLastSec = -1;
   hudIdx = -1;
   hud.classList.add("show");
   hud.setAttribute("aria-hidden", "false");
+  hudPing();                  // they just scrolled in — begin counting
 }
 function stopHud() {
   hud.classList.remove("show");
   hud.setAttribute("aria-hidden", "true");
+  clearTimeout(hudIdleTimer);
   hudSave();
   hudActive = false;
   hudSessionStart = 0;
 }
 
-// pause the clock when the tab is hidden/closed; resume when it's visible again
+// the clock only runs while you're actively engaging (scrolling / moving / typing);
+// it pauses after HUD_IDLE_MS of no activity, and whenever the tab is hidden or closed
+["scroll", "wheel", "touchmove", "mousemove", "keydown", "pointerdown"].forEach((ev) =>
+  window.addEventListener(ev, hudPing, { passive: true })
+);
 document.addEventListener("visibilitychange", () => {
-  if (!hudActive) return;
-  if (document.hidden) {
-    hudBase = hudElapsed();     // bank what we've counted so far
-    hudSave();
-    hudSessionStart = 0;        // stop counting while hidden
-  } else if (!hudSessionStart) {
-    hudSessionStart = Date.now();   // resume only if currently paused
-  }
+  if (document.hidden) { clearTimeout(hudIdleTimer); hudPause(); }
 });
-window.addEventListener("pagehide", hudSave);
+window.addEventListener("pagehide", () => { clearTimeout(hudIdleTimer); hudSave(); });
 
 function fmtTime(sec) {
   const h = Math.floor(sec / 3600);

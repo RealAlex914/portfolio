@@ -781,7 +781,7 @@ img.logo-chip:hover { opacity: 1; }
 .panel-exp .tl-text, .tl-box .tl-text,
 .panel-exp .tl-list li span, .tl-box .tl-list li span { color: rgba(255, 255, 255, 0.6); }
 .panel-exp .tl-list li, .tl-box .tl-list li { border-bottom-color: rgba(255, 255, 255, 0.14); }
-.panel-exp .pill, .tl-box .pill { border-color: rgba(255, 255, 255, 0.55); color: #fff; background: transparent; }
+.panel-exp .pill, .tl-box .pill { border-color: rgba(255, 255, 255, 0.55); color: #fff; background: transparent; text-decoration: none; display: inline-block; }
 .panel-exp .pill:hover, .tl-box .pill:hover,
 .panel-exp .pill.dark, .tl-box .pill.dark { background: #fff; color: #111; }
 
