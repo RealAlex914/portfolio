@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>alex</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="locked">
+
+  <!-- ===== WAAPI WELCOME INTRO (opening splash) ===== -->
+  <div class="welcome show" id="welcome" aria-hidden="true">
+    <div class="welcome-inner">
+      <span class="w-small" id="wSmall">welcome to</span>
+      <span class="w-big" id="wBig">here's <span class="cycle">alex</span></span>
+      <span class="w-hint" id="wHint">scroll to enter&nbsp;↓</span>
+    </div>
+  </div>
+
+  <!-- ===== SITE ===== -->
+  <main class="site" id="site" aria-hidden="true">
+
+    <!-- fixed header (lives outside the smooth-scroll wrapper) -->
+    <header class="nav" id="nav">
+      <div class="nav-in">
+        <span class="logo">alex</span>
+        <div class="nav-right">
+          <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="4.9" y1="4.9" x2="6.4" y2="6.4"/><line x1="17.6" y1="17.6" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="6.4" y2="17.6"/><line x1="17.6" y1="6.4" x2="19.1" y2="4.9"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- live activity HUD -->
+    <aside class="hud" id="hud" aria-hidden="true">
+      <div class="hud-row">
+        <span class="hud-dot"></span>
+        <span class="hud-live">LIVE</span>
+        <span class="hud-time" id="hudTime">00:00</span>
+      </div>
+      <p class="hud-since">since you arrived, alex has</p>
+      <p class="hud-metric"><span class="hud-count" id="hudCount">0</span><span class="hud-label" id="hudLabel">ideas sketched</span></p>
+    </aside>
+
+    <!-- smooth-scroll content -->
+    <div class="smooth-content" id="smoothContent">
+      <!-- hero (full-width so the video collage can reach the edges) -->
+      <section class="hero">
+        <div class="hero-videos" aria-hidden="true">
+          <!-- swap each src for your own clip; the container sets portrait/landscape -->
+          <div class="vid v1 land"><video src="assets/VSA%20UCR%20APP.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+          <div class="vid v2 port"><video src="assets/portrait1.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+          <div class="vid v3 port"><video src="assets/sowinugc.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+          <div class="vid v4 land"><video src="assets/unemployment.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+          <div class="vid v5 land"><video src="assets/roblox.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+        </div>
+
+        <div class="wrap hero-copy">
+          <p class="hero-kicker" data-reveal>portfolio · 2026</p>
+          <h1 class="hero-title" data-reveal>here's <span class="cycle">alex</span><img class="name-gif" src="assets/name.gif" alt="" aria-hidden="true" onerror="this.style.display='none'" /></h1>
+          <p class="hero-sub" data-reveal>Hey, I'm Alex — a 4th-year student at Northeastern, all about building things and growing. I'm studying finance, brand management, and data science, and I'm always chasing the next big thing. I love turning my passions into creative and entrepreneurial outlets, with a ton of hands-on experience in social media marketing and project management.</p>
+          <div class="hero-scroll" data-reveal><span class="scroll-dot"></span> scroll to begin</div>
+        </div>
+      </section>
+
+      <!-- story: experience + resume viewer -->
+      <div class="wrap">
+        <section class="story">
+          <article class="panel panel-exp" data-reveal style="--dx:-90px">
+            <!-- LEFT: sleek clickable resume preview with version tabs -->
+            <div class="exp-resume">
+              <!-- pick a résumé version; edit data-file / data-download to add your own -->
+              <div class="resume-tabs" id="resumeTabs" role="tablist" aria-label="Choose a résumé version">
+                <button class="resume-tab is-active" role="tab" aria-selected="true"
+                        data-file="assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf"
+                        data-download="Alex_Mohammed_Finance_Resume.pdf">Finance</button>
+                <button class="resume-tab" role="tab" aria-selected="false"
+                        data-file="assets/Marketing_Resume.pdf"
+                        data-download="Alex_Mohammed_Marketing_Resume.pdf">Marketing</button>
+                <button class="resume-tab" role="tab" aria-selected="false"
+                        data-file="assets/Data_Resume.pdf"
+                        data-download="Alex_Mohammed_Data_Resume.pdf">Data Science</button>
+              </div>
+
+              <a class="resume-frame" id="resumeFrame" href="assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf" target="_blank" rel="noopener" aria-label="Open résumé in a new tab">
+                <span class="resume-crop" id="resumeCrop">
+                  <object class="resume-doc" data="assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&view=FitH" type="application/pdf">
+                    <span class="resume-fallback">
+                      <span class="resume-fallback-ic">📄</span>
+                      <span>Drop this résumé in as a PDF (in the site folder) and it'll preview right here.</span>
+                    </span>
+                  </object>
+                </span>
+                <span class="resume-overlay"><span class="resume-cta">View résumé ↗</span></span>
+              </a>
+              <div class="resume-actions">
+                <a class="pill" id="resumeDownload" href="assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf" download="Alex_Mohammed_Finance_Resume.pdf">Download résumé ↓</a>
+              </div>
+            </div>
+
+            <!-- RIGHT: experience copy -->
+            <div class="exp-copy">
+              <span class="tl-year">02 · experience</span>
+              <h2 class="panel-title">Experience</h2>
+              <ul class="tl-list">
+                <li><span>2024 —</span> Role / Company</li>
+                <li><span>2023 —</span> Role / Company</li>
+                <li><span>2022 —</span> Northeastern University</li>
+              </ul>
+              <p class="tl-text">Swap in your real roles and dates — social media marketing, project management, and everything in between.</p>
+            </div>
+          </article>
+        </section>
+      </div>
+
+      <!-- timeline -->
+      <div class="wrap">
+        <section class="timeline" id="timeline">
+          <div class="tl-line"><span class="tl-fill" id="tlFill"></span></div>
+          <span class="tl-arrow" id="tlArrow"></span>
+
+          <div class="tl-item left">
+            <span class="tl-node"></span>
+            <article class="tl-box" data-reveal>
+              <span class="tl-year">03 · project</span>
+              <h2 class="tl-title">Project One</h2>
+              <div class="ph"></div>
+              <p class="tl-text">Drop a project screenshot or photo above and describe it here.</p>
+              <button class="pill">View project</button>
+            </article>
+          </div>
+
+          <div class="tl-item right">
+            <span class="tl-node"></span>
+            <article class="tl-box" data-reveal>
+              <span class="tl-year">04 · project</span>
+              <h2 class="tl-title">Project Two</h2>
+              <div class="ph"></div>
+              <p class="tl-text">Another project box — image, a sentence, and a link.</p>
+              <button class="pill">View project</button>
+            </article>
+          </div>
+
+          <div class="tl-item left">
+            <span class="tl-node"></span>
+            <article class="tl-box" data-reveal>
+              <span class="tl-year">05 · pictures</span>
+              <h2 class="tl-title">Gallery</h2>
+              <div class="tl-gallery">
+                <div class="ph"></div><div class="ph"></div><div class="ph"></div>
+                <div class="ph"></div><div class="ph"></div><div class="ph"></div>
+              </div>
+              <p class="tl-text">A grid for your photos — replace each tile with an image.</p>
+            </article>
+          </div>
+
+          <div class="tl-item right">
+            <span class="tl-node"></span>
+            <article class="tl-box" data-reveal>
+              <span class="tl-year">06 · contact</span>
+              <h2 class="tl-title">Say hello</h2>
+              <p class="tl-text">hello@alex.me</p>
+              <div class="socials"><span></span><span></span><span></span><span></span></div>
+              <button class="pill dark">Get in touch</button>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <!-- integrations-style tool grid -->
+      <section class="tools" data-reveal style="--dx:0">
+        <div class="tools-head">
+          <h2 class="tools-title">The tools I build with</h2>
+          <p class="tools-sub">Design, brand, data, and everything in between — the kit I reach for daily.</p>
+        </div>
+        <div class="tools-grid">
+          <div class="tool-card tool-feature">
+            <span class="feature-mark">alex's toolbox</span>
+            <span class="feature-pill">the essentials</span>
+          </div>
+          <div class="tool-card"><img src="assets/2.png" alt="" /></div>
+          <div class="tool-card"><img src="assets/3.png" alt="" /></div>
+          <div class="tool-card"><img src="assets/4.png" alt="" /></div>
+          <div class="tool-card"><img src="assets/5.png" alt="" /></div>
+          <div class="tool-card"><img src="assets/6.png" alt="" /></div>
+          <div class="tool-card"><img src="assets/7.png" alt="" /></div>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <div class="foot-in">
+          <span>© 2026 alex</span>
+          <span>built with the web animations api</span>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
