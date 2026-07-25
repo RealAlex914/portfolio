@@ -222,6 +222,8 @@ html:has(body.locked) { overflow: hidden; }
 }
 .ph:hover::before, .ph:hover::after { transform: scale(1.06); }
 .ph.portrait { aspect-ratio: 3 / 4; }
+/* a real thumbnail image fills the placeholder and covers the icon */
+.ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 
 /* scroll-reveal: content slides in from a side (--dx set per element in JS) */
 [data-reveal] {
@@ -528,8 +530,10 @@ img.logo-chip:hover { opacity: 1; }
   background: #fff;
 }
 .resume-doc {
-  width: calc(100% + 17px);           /* push the scrollbar past the crop edge */
+  /* overscale + center so the PDF viewer's side gutters + scrollbar are clipped off */
+  width: calc(100% + 48px);
   height: 100%;
+  margin-left: -24px;
   border: 0;
   display: block;
   background: #fff;
@@ -661,6 +665,25 @@ img.logo-chip:hover { opacity: 1; }
 .tl-list li span { color: var(--muted); min-width: 62px; }
 .tl-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .tl-gallery .ph { aspect-ratio: 1 / 1; border-radius: 10px; }
+/* project bullet list (on the dark cards) */
+.tl-bullets { list-style: none; margin: 10px 0 18px; padding: 0; }
+.tl-bullets li {
+  position: relative;
+  padding: 7px 0 7px 20px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+.tl-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 13px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ff7010;
+}
 .socials { display: flex; gap: 10px; margin: 16px 0 20px; }
 .socials span {
   width: 30px; height: 30px;
@@ -732,12 +755,8 @@ img.logo-chip:hover { opacity: 1; }
 .tool-card img {
   max-width: 64%;
   max-height: 54%;
-  object-fit: contain;
-  filter: grayscale(1) brightness(0) invert(1);   /* white on the dark card */
-  opacity: 0.62;
-  transition: filter 0.35s var(--ease), opacity 0.35s var(--ease);
+  object-fit: contain;   /* original colors — no masking / silhouette */
 }
-.tool-card:hover img { filter: none; opacity: 1; }   /* full color on hover */
 /* empty placeholder cards get the image icon */
 .tool-card:empty {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23b0b0b0'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Crect%20x='3'%20y='3'%20width='18'%20height='18'%20rx='2'/%3E%3Ccircle%20cx='8.5'%20cy='8.5'%20r='1.6'/%3E%3Cpath%20d='M21%2015l-5-5L5%2021'/%3E%3C/svg%3E");
@@ -795,6 +814,21 @@ img.logo-chip:hover { opacity: 1; }
   border-radius: 0;
   box-shadow: none;
 }
+
+/* timeline + tool cards: use frame 10.png via 9-slice (scales without distortion) */
+.tl-box, .tool-card {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-style: solid;
+  border-color: transparent;
+  border-image: url("assets/frame%2010.png") 83 98 110 98 fill stretch;
+  border-radius: 0;
+  box-shadow: none;
+}
+.tl-box { border-width: 26px; }
+.tool-card { border-width: 16px; }
+.tool-card:hover { box-shadow: none; }   /* the frame supplies the shadow; keep just the lift */
 
 /* ---------- footer ---------- */
 .foot { border-top: 1px solid var(--line); padding: 40px 0; }
