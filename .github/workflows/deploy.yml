@@ -10,6 +10,7 @@ on:
 # permissions the Pages deployment needs
 permissions:
   contents: read
+  actions: read      # lets the wait step poll this run's artifacts
   pages: write
   id-token: write
 
@@ -24,7 +25,7 @@ jobs:
     environment:
       name: github-pages
       # whichever attempt actually deployed
-      url: ${{ steps.deploy.outputs.page_url || steps.deploy_retry.outputs.page_url }}
+      url: ${{ steps.deploy1.outputs.page_url || steps.deploy2.outputs.page_url || steps.deploy3.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -33,25 +34,19 @@ jobs:
         uses: actions/configure-pages@v6
 
       # ---------------------------------------------------------------------
-      # Why upload-pages-artifact is pinned to v4, and why there's a retry:
+      # Why v4 is pinned, and why the deploy is attempted several times:
       #
       # deploy-pages reads artifacts with @actions/artifact ^2.x. The only
       # uploader still on that protocol is upload-artifact@v4, which targets
-      # Node 20 -- a runtime GitHub has retired, so it gets force-run on the
-      # Node 24 runner. That mismatch makes the handoff intermittently fail
-      # with "No artifacts named github-pages were found", even though the
-      # upload step reports success and the artifact is visible over the REST
-      # API. Roughly one run in three.
+      # Node 20 -- a runtime GitHub retired -- so it gets force-run on Node 24.
+      # That mismatch makes the handoff intermittently fail with "No artifacts
+      # named github-pages were found", even though the upload reports success
+      # and the artifact is visible over the REST API moments later.
       #
-      # There is no version pairing that avoids this. Every newer uploader
-      # (v5 -> artifact ^4, v6 -> ^5, v7 -> ^6) speaks a protocol deploy-pages
-      # cannot read, so bumping upload-pages-artifact to v5 fails 100% of the
-      # time rather than 33%. Leave this at v4 until deploy-pages ships support
-      # for the newer artifact protocol.
-      #
-      # So: attempt once, and on failure re-upload under a second name and
-      # deploy that. Re-uploading (rather than just retrying the deploy)
-      # recovers from a bad upload as well as a bad read.
+      # Do NOT "upgrade" this: every newer uploader (v5 -> artifact ^4,
+      # v6 -> ^5, v7 -> ^6) speaks a protocol deploy-pages cannot read, so it
+      # fails 100% of the time instead of intermittently. Revisit only once
+      # deploy-pages ships support for the newer artifact protocol.
       # ---------------------------------------------------------------------
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
@@ -59,22 +54,47 @@ jobs:
           # the whole repo root is the site (index.html lives here)
           path: '.'
 
+      # The failure is a visibility race, so give the artifact time to register
+      # before asking deploy-pages to find it.
+      - name: Wait for the artifact to register
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.run_id }}
+          REPO: ${{ github.repository }}
+        run: |
+          for i in $(seq 1 24); do
+            n=$(gh api "repos/$REPO/actions/runs/$RUN_ID/artifacts" \
+                  --jq '[.artifacts[] | select(.name=="github-pages")] | length' 2>/dev/null || echo 0)
+            if [ "${n:-0}" -ge 1 ]; then
+              echo "artifact registered after ~$((i*5))s; letting it settle"
+              sleep 20
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::warning::artifact never showed up in the REST listing; trying the deploy anyway"
+
       - name: Deploy to GitHub Pages
-        id: deploy
+        id: deploy1
         uses: actions/deploy-pages@v5
         continue-on-error: true
 
-      - name: Re-upload site (retry)
-        if: steps.deploy.outcome == 'failure'
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: '.'
-          name: github-pages-retry
+      - name: Back off before retrying
+        if: steps.deploy1.outcome == 'failure'
+        run: sleep 45
 
-      # no continue-on-error here: if the retry also fails, fail the job
-      - name: Deploy to GitHub Pages (retry)
-        id: deploy_retry
-        if: steps.deploy.outcome == 'failure'
+      - name: Deploy to GitHub Pages (attempt 2)
+        id: deploy2
+        if: steps.deploy1.outcome == 'failure'
         uses: actions/deploy-pages@v5
-        with:
-          artifact_name: github-pages-retry
+        continue-on-error: true
+
+      - name: Back off before the final attempt
+        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        run: sleep 90
+
+      # no continue-on-error: if this one fails too, fail the job
+      - name: Deploy to GitHub Pages (final attempt)
+        id: deploy3
+        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        uses: actions/deploy-pages@v5
