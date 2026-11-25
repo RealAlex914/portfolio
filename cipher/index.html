@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>? · alex</title>
+  <link rel="stylesheet" href="../styles.css?v=20261125d" />
+  <script>
+    /* Decide BEFORE first paint whether the splash runs, so moving between pages
+       never flashes it. Inline and in <head> on purpose — an external file would
+       load too late to beat the paint. Paired with :root.no-splash in styles.css. */
+    try {
+      if (sessionStorage.getItem("alexSplashSeen") === "1") {
+        document.documentElement.classList.add("no-splash");
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body class="locked">
+
+  <div class="welcome show" id="welcome" aria-hidden="true">
+    <div class="welcome-inner">
+      <span class="w-small" id="wSmall">welcome to</span>
+      <span class="w-big" id="wBig">here's <span class="cycle">alex</span></span>
+      <span class="w-hint" id="wHint">scroll to enter&nbsp;↓</span>
+    </div>
+  </div>
+
+  <main class="site" id="site" aria-hidden="true">
+
+    <header class="nav" id="nav">
+      <div class="nav-in">
+        <a class="logo" href="../index.html">alex</a>
+        <nav class="nav-links" aria-label="Main">
+          <a href="../index.html">home</a>
+          <a href="../work/index.html">work</a>
+          <a href="../experience/index.html">experience</a>
+          <a href="../contact/index.html">contact</a>
+          <a href="index.html" class="nav-q is-current" aria-current="page" aria-label="?">?</a>
+        </nav>
+        <div class="nav-right">
+          <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="4.9" y1="4.9" x2="6.4" y2="6.4"/><line x1="17.6" y1="17.6" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="6.4" y2="17.6"/><line x1="17.6" y1="6.4" x2="19.1" y2="4.9"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- deliberately no activity HUD on this page: it breaks the mood -->
+
+    <div class="smooth-content" id="smoothContent">
+
+      <section class="cipher-wrap">
+        <div class="wrap">
+
+          <div class="cipher-head">
+            <pre class="cipher-sigil" aria-hidden="true">3301</pre>
+            <p class="cipher-kicker" id="cipherProgress">stage — of —</p>
+          </div>
+
+          <!-- the live stage renders in here -->
+          <section class="cipher-stage" id="cipherStage" aria-live="polite"></section>
+
+          <!-- shown once every stage is solved -->
+          <section class="cipher-final" id="cipherFinal" hidden></section>
+
+          <p class="cipher-reset"><button type="button" id="cipherReset">start over</button></p>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <div class="foot-in">
+          <span>© 2026 alex</span>
+          <nav class="foot-links" aria-label="Footer">
+            <a href="../index.html">home</a>
+            <a href="../work/index.html">work</a>
+            <a href="../experience/index.html">experience</a>
+            <a href="../contact/index.html">contact</a>
+          </nav>
+          <span>built with the web animations api</span>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <script src="../script.js?v=20261125d"></script>
+
+  <script>
+  /* ===================================================================
+     THE PUZZLE
+     ===================================================================
+     Everything you need to edit lives in STAGES and FINAL below.
+     Nothing else in this file needs touching.
+
+     Each stage:
+       title   - the stage's label (I, II, III ... or anything)
+       lines   - cryptic preamble, one string per line
+       cipher  - the ciphertext block, shown in a monospace panel
+       hint    - revealed after 3 wrong attempts (set to "" for no hint)
+       answer  - THE ANSWER, stored as a SHA-256 hash, not plain text,
+                 so nobody can just read it in "view source"
+
+     To generate a hash for a new answer, open the browser console on
+     this page and run:
+
+         await hashAnswer("your answer here")
+
+     ...then paste the result into the stage's `answer` field. Matching
+     ignores case, spaces and punctuation, so "The Path" == "thepath".
+     =================================================================== */
+
+  const STAGES = [
+    {
+      title: "I",
+      lines: [
+        "A word is hidden here.",
+        "Caesar knew it. Shift three back.",
+      ],
+      cipher: "EHJLQ WKH KXQW",
+      hint: "Each letter has walked three places forward. Walk it back.",
+      // PLACEHOLDER answer = "begin the hunt"
+      answer: "ee0ee4223028990afc3916b1f09bc162cbe548c74f5bb1cebcd32139ed3ce4fd",
+    },
+    {
+      title: "II",
+      lines: [
+        "Numbers are only letters wearing coats.",
+        "Count from the beginning.",
+      ],
+      cipher: "20-8-5  19-5-3-15-14-4  7-1-20-5",
+      hint: "1 = A. Keep going.",
+      // PLACEHOLDER answer = "the second gate"
+      answer: "9fe7aaac834ac2aafb31933e786a995a86619d8fc805cbfe47c77c79ff56b16b",
+    },
+    {
+      title: "III",
+      lines: [
+        "The last door has no lock.",
+        "It only asks who you are.",
+      ],
+      cipher: ".-- .... --- / .- .-. . / -.-- --- ..-",
+      hint: "Dots and dashes. The oldest alphabet on a wire.",
+      // PLACEHOLDER answer = "who are you"
+      answer: "8d60ef6493681058f91527d87216100570b87e1593a1e55fcb5de5bdc0cd620b",
+    },
+  ];
+
+  // shown after the final stage is solved — the payoff
+  const FINAL = {
+    title: "IIII",
+    lines: [
+      "You found it.",
+      "",
+      "HAPPY BIRTHDAY.",
+      "",
+      "(replace this with the real message — a place, a time, a password)",
+    ],
+  };
+
+  /* ===== engine — no need to edit below this line ===================== */
+  (function cicada() {
+    const stageEl = document.getElementById("cipherStage");
+    const finalEl = document.getElementById("cipherFinal");
+    const progEl  = document.getElementById("cipherProgress");
+    const resetEl = document.getElementById("cipherReset");
+    if (!stageEl || !finalEl) return;
+
+    const KEY = "cicadaProgress";
+    const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+    // exposed so you can generate hashes from the console
+    window.hashAnswer = async function (text) {
+      const buf = new TextEncoder().encode(norm(text));
+      const digest = await crypto.subtle.digest("SHA-256", buf);
+      return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+    };
+
+    let solved = 0;
+    try { solved = Math.min(parseInt(localStorage.getItem(KEY), 10) || 0, STAGES.length); } catch (e) {}
+    let attempts = 0;
+
+    function save() { try { localStorage.setItem(KEY, String(solved)); } catch (e) {} }
+
+    function renderFinal() {
+      stageEl.hidden = true;
+      finalEl.hidden = false;
+      progEl.textContent = "complete";
+      finalEl.innerHTML = "";
+      const h = document.createElement("p");
+      h.className = "cipher-stage-no";
+      h.textContent = FINAL.title;
+      finalEl.appendChild(h);
+      for (const line of FINAL.lines) {
+        const p = document.createElement("p");
+        p.className = "cipher-line";
+        p.textContent = line;
+        if (!line) p.innerHTML = "&nbsp;";
+        finalEl.appendChild(p);
+      }
+      finalEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: "cubic-bezier(0.22,1,0.36,1)", fill: "both" });
+    }
+
+    function render() {
+      if (solved >= STAGES.length) return renderFinal();
+      const s = STAGES[solved];
+      attempts = 0;
+      stageEl.hidden = false;
+      finalEl.hidden = true;
+      progEl.textContent = `stage ${solved + 1} of ${STAGES.length}`;
+
+      stageEl.innerHTML = "";
+      const no = document.createElement("p");
+      no.className = "cipher-stage-no";
+      no.textContent = s.title;
+      stageEl.appendChild(no);
+
+      for (const line of s.lines) {
+        const p = document.createElement("p");
+        p.className = "cipher-line";
+        p.textContent = line;
+        stageEl.appendChild(p);
+      }
+
+      const pre = document.createElement("pre");
+      pre.className = "cipher-text";
+      pre.textContent = s.cipher;
+      stageEl.appendChild(pre);
+
+      const form = document.createElement("form");
+      form.className = "cipher-form";
+      form.innerHTML =
+        '<input class="cipher-input" type="text" autocomplete="off" autocapitalize="off" ' +
+        'spellcheck="false" placeholder="enter the key" aria-label="Enter the answer" />' +
+        '<button class="pill cipher-submit" type="submit">submit</button>';
+      stageEl.appendChild(form);
+
+      const msg = document.createElement("p");
+      msg.className = "cipher-msg";
+      stageEl.appendChild(msg);
+
+      const input = form.querySelector(".cipher-input");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const guess = input.value.trim();
+        if (!guess) return;
+        const ok = (await window.hashAnswer(guess)) === s.answer;
+        if (ok) {
+          msg.className = "cipher-msg is-good";
+          msg.textContent = "correct.";
+          form.querySelector(".cipher-submit").disabled = true;
+          input.disabled = true;
+          await stageEl.animate([{ opacity: 1 }, { opacity: 0 }],
+            { duration: 650, delay: 550, easing: "cubic-bezier(0.22,1,0.36,1)", fill: "both" }).finished;
+          solved++; save();
+          render();
+          stageEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, easing: "cubic-bezier(0.22,1,0.36,1)", fill: "both" });
+        } else {
+          attempts++;
+          msg.className = "cipher-msg is-bad";
+          msg.textContent = attempts >= 3 && s.hint ? s.hint : "not it.";
+          stageEl.animate(
+            [{ transform: "translateX(0)" }, { transform: "translateX(-8px)" }, { transform: "translateX(8px)" }, { transform: "translateX(0)" }],
+            { duration: 320, easing: "ease" }
+          );
+          input.select();
+        }
+      });
+      input.focus({ preventScroll: true });
+    }
+
+    resetEl.addEventListener("click", () => {
+      solved = 0; save();
+      stageEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, fill: "both" });
+      render();
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>
