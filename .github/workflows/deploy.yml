@@ -7,14 +7,9 @@ on:
   # allow manual runs from the Actions tab
   workflow_dispatch:
 
-# permissions the Pages deployment needs.
-# Declaring this block sets every unlisted scope to "none", so actions:read
-# must be explicit — without it deploy-pages cannot list the run's artifacts
-# and fails with "No artifacts named github-pages were found" even though the
-# upload step succeeded.
+# permissions the Pages deployment needs
 permissions:
   contents: read
-  actions: read
   pages: write
   id-token: write
 
@@ -30,18 +25,21 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      # Keep these on current majors. GitHub retired the Node 20 runner, which
-      # forced the older action versions onto Node 24 and broke the handoff
-      # between upload-pages-artifact and deploy-pages ("No artifacts named
-      # github-pages were found"). Pinning further back will start failing again.
       - name: Checkout
         uses: actions/checkout@v7
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
+      # Pinned to v4 on purpose — do NOT bump to v5 until deploy-pages catches up.
+      # upload-pages-artifact@v5 uploads through actions/upload-artifact@v7, which
+      # speaks the new artifact Results protocol, while deploy-pages (v5.0.1, the
+      # newest) still lists artifacts with @actions/artifact ^2.x. The two can't
+      # see each other, so the upload succeeds and the deploy then fails with
+      # "No artifacts named github-pages were found". v4 pins upload-artifact
+      # @v4.6.2, which matches the client deploy-pages actually uses.
       - name: Upload site
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@v4
         with:
           # the whole repo root is the site (index.html lives here)
           path: '.'
