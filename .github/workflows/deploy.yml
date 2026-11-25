@@ -23,7 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      # whichever attempt actually deployed
+      url: ${{ steps.deploy.outputs.page_url || steps.deploy_retry.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -31,13 +32,27 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
-      # Pinned to v4 on purpose — do NOT bump to v5 until deploy-pages catches up.
-      # upload-pages-artifact@v5 uploads through actions/upload-artifact@v7, which
-      # speaks the new artifact Results protocol, while deploy-pages (v5.0.1, the
-      # newest) still lists artifacts with @actions/artifact ^2.x. The two can't
-      # see each other, so the upload succeeds and the deploy then fails with
-      # "No artifacts named github-pages were found". v4 pins upload-artifact
-      # @v4.6.2, which matches the client deploy-pages actually uses.
+      # ---------------------------------------------------------------------
+      # Why upload-pages-artifact is pinned to v4, and why there's a retry:
+      #
+      # deploy-pages reads artifacts with @actions/artifact ^2.x. The only
+      # uploader still on that protocol is upload-artifact@v4, which targets
+      # Node 20 -- a runtime GitHub has retired, so it gets force-run on the
+      # Node 24 runner. That mismatch makes the handoff intermittently fail
+      # with "No artifacts named github-pages were found", even though the
+      # upload step reports success and the artifact is visible over the REST
+      # API. Roughly one run in three.
+      #
+      # There is no version pairing that avoids this. Every newer uploader
+      # (v5 -> artifact ^4, v6 -> ^5, v7 -> ^6) speaks a protocol deploy-pages
+      # cannot read, so bumping upload-pages-artifact to v5 fails 100% of the
+      # time rather than 33%. Leave this at v4 until deploy-pages ships support
+      # for the newer artifact protocol.
+      #
+      # So: attempt once, and on failure re-upload under a second name and
+      # deploy that. Re-uploading (rather than just retrying the deploy)
+      # recovers from a bad upload as well as a bad read.
+      # ---------------------------------------------------------------------
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
@@ -45,5 +60,21 @@ jobs:
           path: '.'
 
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: deploy
         uses: actions/deploy-pages@v5
+        continue-on-error: true
+
+      - name: Re-upload site (retry)
+        if: steps.deploy.outcome == 'failure'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: '.'
+          name: github-pages-retry
+
+      # no continue-on-error here: if the retry also fails, fail the job
+      - name: Deploy to GitHub Pages (retry)
+        id: deploy_retry
+        if: steps.deploy.outcome == 'failure'
+        uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-retry
