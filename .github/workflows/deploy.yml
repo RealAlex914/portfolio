@@ -7,9 +7,14 @@ on:
   # allow manual runs from the Actions tab
   workflow_dispatch:
 
-# permissions the Pages deployment needs
+# permissions the Pages deployment needs.
+# Declaring this block sets every unlisted scope to "none", so actions:read
+# must be explicit — without it deploy-pages cannot list the run's artifacts
+# and fails with "No artifacts named github-pages were found" even though the
+# upload step succeeded.
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
