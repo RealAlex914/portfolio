@@ -23,7 +23,13 @@
     <!-- fixed header (lives outside the smooth-scroll wrapper) -->
     <header class="nav" id="nav">
       <div class="nav-in">
-        <span class="logo">alex</span>
+        <a class="logo" href="index.html">alex</a>
+        <nav class="nav-links" aria-label="Main">
+          <a href="index.html" class="is-current" aria-current="page">home</a>
+          <a href="work/index.html">work</a>
+          <a href="experience/index.html">experience</a>
+          <a href="contact/index.html">contact</a>
+        </nav>
         <div class="nav-right">
           <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
             <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -65,129 +71,57 @@
         </div>
       </section>
 
-      <!-- story: experience + resume viewer -->
+      <!-- featured work: each card opens its own page -->
       <div class="wrap">
-        <section class="story">
-          <article class="panel panel-exp" data-reveal style="--dx:-90px">
-            <!-- LEFT: sleek clickable resume preview with version tabs -->
-            <div class="exp-resume">
-              <!-- pick a résumé version; edit data-file / data-download to add your own -->
-              <div class="resume-tabs" id="resumeTabs" role="tablist" aria-label="Choose a résumé version">
-                <button class="resume-tab is-active" role="tab" aria-selected="true"
-                        data-file="assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf"
-                        data-download="Alex_Mohammed_Finance_Resume.pdf">Finance</button>
-                <button class="resume-tab" role="tab" aria-selected="false"
-                        data-file="assets/Marketing_Resume.pdf"
-                        data-download="Alex_Mohammed_Marketing_Resume.pdf">Marketing</button>
-                <button class="resume-tab" role="tab" aria-selected="false"
-                        data-file="assets/Data_Resume.pdf"
-                        data-download="Alex_Mohammed_Data_Resume.pdf">Data Science</button>
-              </div>
-
-              <a class="resume-frame" id="resumeFrame" href="assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf" target="_blank" rel="noopener" aria-label="Open résumé in a new tab">
-                <span class="resume-crop" id="resumeCrop">
-                  <object class="resume-doc" data="assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&view=FitH" type="application/pdf">
-                    <span class="resume-fallback">
-                      <span class="resume-fallback-ic">📄</span>
-                      <span>Drop this résumé in as a PDF (in the site folder) and it'll preview right here.</span>
-                    </span>
-                  </object>
-                </span>
-                <span class="resume-overlay"><span class="resume-cta">View résumé ↗</span></span>
-              </a>
-              <div class="resume-actions">
-                <a class="pill" id="resumeDownload" href="assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf" download="Alex_Mohammed_Finance_Resume.pdf">Download résumé ↓</a>
-              </div>
+        <section class="feat" data-reveal style="--dx:0">
+          <div class="feat-head">
+            <div>
+              <span class="tl-year">selected work</span>
+              <h2 class="feat-title">Things I've built</h2>
             </div>
-
-            <!-- RIGHT: experience copy -->
-            <div class="exp-copy">
-              <span class="tl-year">02 · experience</span>
-              <h2 class="panel-title">Experience</h2>
-              <ul class="tl-list">
-                <li><span>2026 —</span> Founder · Sowin</li>
-                <li><span>2026 —</span> Incoming Analyst · Wayfair</li>
-                <li><span>2025 —</span> Marketing Manager · CSDS, Northeastern</li>
-                <li><span>2023 —</span> Student Body President · SGA Northeastern</li>
-                <li><span>2021 —</span> Founder · Alex's Eatery</li>
-              </ul>
-              <p class="tl-text">Founder at heart — from a 5k-MRR baked-goods business to 700k+ monthly organic impressions in marketing, now building a Christian social platform and joining Wayfair as an analyst.</p>
-            </div>
-          </article>
-        </section>
-      </div>
-
-      <!-- timeline -->
-      <div class="wrap">
-        <section class="timeline" id="timeline">
-          <div class="tl-line"><span class="tl-fill" id="tlFill"></span></div>
-          <span class="tl-arrow" id="tlArrow"></span>
-
-          <div class="tl-item left">
-            <span class="tl-node"></span>
-            <article class="tl-box" data-reveal>
-              <span class="tl-year">03 · hackathon</span>
-              <h2 class="tl-title">Math Monsters</h2>
-              <div class="ph"><img src="assets/Math%20Monsters%20%2830%29.png" alt="Math Monsters" /></div>
-              <ul class="tl-bullets">
-                <li>Gamified math-learning app built at PawHacks; I led UI/UX and frontend.</li>
-                <li>Shipped a working demo and pitch deck.</li>
-                <li>Won the hackathon's gaming track.</li>
-              </ul>
-              <a class="pill" href="https://devpost.com/software/math-monsters" target="_blank" rel="noopener">View project ↗</a>
-            </article>
+            <a class="pill" href="work/index.html">See all work →</a>
           </div>
 
-          <div class="tl-item right">
-            <span class="tl-node"></span>
-            <article class="tl-box" data-reveal>
-              <span class="tl-year">04 · startup</span>
-              <h2 class="tl-title">Sowin</h2>
-              <div class="ph"><img src="assets/updated%20figma%20design.png" alt="Sowin app profile view" style="object-position: center bottom;" /></div>
-              <p class="tl-text">Founder — building a Christian social + Bible platform from the ground up. Live on the App Store.</p>
-              <a class="pill" href="https://apps.apple.com/us/app/sowin-social-bible-app/id6761856289" target="_blank" rel="noopener">View on App Store ↗</a>
-            </article>
-          </div>
+          <div class="work-grid">
+            <a class="work-card" href="work/sowin/index.html">
+              <span class="work-shot"><img src="assets/updated%20figma%20design.png" alt="" style="object-position: center bottom;" /></span>
+              <span class="work-meta">
+                <span class="work-kicker">startup · 2026</span>
+                <span class="work-name">Sowin</span>
+                <span class="work-blurb">A Christian social + Bible platform, built from the ground up and live on the App Store.</span>
+                <span class="work-go">Read the story →</span>
+              </span>
+            </a>
 
-          <div class="tl-item left">
-            <span class="tl-node"></span>
-            <article class="tl-box" data-reveal>
-              <span class="tl-year">05 · project</span>
-              <h2 class="tl-title">Markowitz Portfolio Optimization</h2>
-              <ul class="tl-bullets">
-                <li>Solved the tangent (max-Sharpe) portfolio across 13 stocks with mean-variance optimization — building the full covariance matrix and inverting it to derive the optimal weights.</li>
-                <li>Ran a CAPM single-index regression on every stock for beta, Jensen's alpha, R², and firm-specific risk, with complete ANOVA output (t-stats, p-values, 95% CIs).</li>
-                <li>Benchmarked risk-adjusted performance — annualized Sharpe, M², information ratio, and tracking error — against the SPY market index.</li>
-                <li>Built a Treynor-Black Single Index Model portfolio and a $1,000 allocation; both it and the tangent portfolio beat the market (annualized Sharpe &gt; 1.18).</li>
-              </ul>
-              <a class="pill" href="assets/Markowitz%20Analysis%20.xlsx" download>View the model ↓</a>
-            </article>
-          </div>
+            <a class="work-card" href="work/math-monsters/index.html">
+              <span class="work-shot"><img src="assets/Math%20Monsters%20%2830%29.png" alt="" /></span>
+              <span class="work-meta">
+                <span class="work-kicker">hackathon · pawhacks</span>
+                <span class="work-name">Math Monsters</span>
+                <span class="work-blurb">Gamified math-learning app. I led UI/UX and frontend — and we won the gaming track.</span>
+                <span class="work-go">Read the story →</span>
+              </span>
+            </a>
 
-          <div class="tl-item right">
-            <span class="tl-node"></span>
-            <article class="tl-box" data-reveal>
-              <span class="tl-year">06 · hackathon</span>
-              <h2 class="tl-title">Portal Card</h2>
-              <div class="ph"><img src="assets/Portal%20Card.png" alt="Portal Card" /></div>
-              <ul class="tl-bullets">
-                <li>Spearheaded ideation and product direction for the team at Finhacks.</li>
-                <li>Ran project management and led the UI/UX design end-to-end.</li>
-                <li>Won the hackathon.</li>
-              </ul>
-              <a class="pill" href="https://devpost.com/software/portal-card" target="_blank" rel="noopener">View project ↗</a>
-            </article>
-          </div>
+            <a class="work-card" href="work/portal-card/index.html">
+              <span class="work-shot"><img src="assets/Portal%20Card.png" alt="" /></span>
+              <span class="work-meta">
+                <span class="work-kicker">hackathon · finhacks</span>
+                <span class="work-name">Portal Card</span>
+                <span class="work-blurb">Led ideation, product direction, and end-to-end UI/UX. First place.</span>
+                <span class="work-go">Read the story →</span>
+              </span>
+            </a>
 
-          <div class="tl-item left">
-            <span class="tl-node"></span>
-            <article class="tl-box" data-reveal>
-              <span class="tl-year">07 · contact</span>
-              <h2 class="tl-title">Let's Connect</h2>
-              <p class="tl-text"><a href="mailto:mohammed.al@northeastern.edu" style="color:inherit;text-decoration:none">mohammed.al@northeastern.edu</a></p>
-              <div class="socials"><span></span><span></span><span></span><span></span></div>
-              <a class="pill dark" href="https://dot.cards/alexmohammed" target="_blank" rel="noopener">Get in touch ↗</a>
-            </article>
+            <a class="work-card" href="work/markowitz/index.html">
+              <span class="work-shot work-shot-alt"><span class="work-glyph">Σ</span></span>
+              <span class="work-meta">
+                <span class="work-kicker">quant · project</span>
+                <span class="work-name">Markowitz Portfolio Optimization</span>
+                <span class="work-blurb">Mean-variance optimization across 13 stocks, with CAPM regressions and full ANOVA output.</span>
+                <span class="work-go">Read the story →</span>
+              </span>
+            </a>
           </div>
         </section>
       </div>
@@ -217,6 +151,12 @@
       <footer class="foot">
         <div class="foot-in">
           <span>© 2026 alex</span>
+          <nav class="foot-links" aria-label="Footer">
+            <a href="index.html">home</a>
+            <a href="work/index.html">work</a>
+            <a href="experience/index.html">experience</a>
+            <a href="contact/index.html">contact</a>
+          </nav>
           <span>built with the web animations api</span>
         </div>
       </footer>

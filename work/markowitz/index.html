@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markowitz Portfolio Optimization · alex</title>
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body class="locked">
+
+  <div class="welcome show" id="welcome" aria-hidden="true">
+    <div class="welcome-inner">
+      <span class="w-small" id="wSmall">welcome to</span>
+      <span class="w-big" id="wBig">here's <span class="cycle">alex</span></span>
+      <span class="w-hint" id="wHint">scroll to enter&nbsp;↓</span>
+    </div>
+  </div>
+
+  <main class="site" id="site" aria-hidden="true">
+
+    <header class="nav" id="nav">
+      <div class="nav-in">
+        <a class="logo" href="../../index.html">alex</a>
+        <nav class="nav-links" aria-label="Main">
+          <a href="../../index.html">home</a>
+          <a href="../index.html" class="is-current" aria-current="page">work</a>
+          <a href="../../experience/index.html">experience</a>
+          <a href="../../contact/index.html">contact</a>
+        </nav>
+        <div class="nav-right">
+          <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="4.9" y1="4.9" x2="6.4" y2="6.4"/><line x1="17.6" y1="17.6" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="6.4" y2="17.6"/><line x1="17.6" y1="6.4" x2="19.1" y2="4.9"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <aside class="hud" id="hud" aria-hidden="true">
+      <div class="hud-row">
+        <span class="hud-dot"></span>
+        <span class="hud-live">LIVE</span>
+        <span class="hud-time" id="hudTime">00:00</span>
+      </div>
+      <p class="hud-since">since you arrived, alex has</p>
+      <p class="hud-metric"><span class="hud-count" id="hudCount">0</span><span class="hud-label" id="hudLabel">ideas sketched</span></p>
+    </aside>
+
+    <div class="smooth-content" id="smoothContent">
+
+      <section class="page-hero">
+        <div class="wrap">
+          <a class="crumb" href="../index.html">← all work</a>
+          <p class="hero-kicker" data-reveal style="--dx:0">05 · project</p>
+          <h1 class="page-title" data-reveal style="--dx:0">Markowitz Portfolio Optimization</h1>
+          <p class="page-sub" data-reveal style="--dx:0">Mean-variance optimization across 13 stocks — building the covariance matrix, inverting it, and benchmarking the result against the market.</p>
+        </div>
+      </section>
+
+      <div class="wrap">
+        <section class="proj" data-reveal style="--dx:0">
+          <div class="proj-shot proj-shot-alt">
+            <span class="proj-glyph">Σ</span>
+          </div>
+
+          <div class="proj-grid">
+            <div class="proj-body">
+              <h2 class="proj-h">What it is</h2>
+              <p>A full mean-variance analysis in the Markowitz tradition: find the portfolio that maximizes risk-adjusted return across a 13-stock universe, then check honestly whether it actually beat just holding the market.</p>
+
+              <h2 class="proj-h">What I built</h2>
+              <ul class="proj-list">
+                <li>Solved the tangent (max-Sharpe) portfolio across 13 stocks with mean-variance optimization — building the full covariance matrix and inverting it to derive the optimal weights.</li>
+                <li>Ran a CAPM single-index regression on every stock for beta, Jensen's alpha, R², and firm-specific risk, with complete ANOVA output (t-stats, p-values, 95% CIs).</li>
+                <li>Benchmarked risk-adjusted performance — annualized Sharpe, M², information ratio, and tracking error — against the SPY market index.</li>
+                <li>Built a Treynor-Black Single Index Model portfolio and a $1,000 allocation.</li>
+              </ul>
+
+              <h2 class="proj-h">Result</h2>
+              <p>Both the Treynor-Black portfolio and the tangent portfolio beat the market, with annualized Sharpe ratios above 1.18.</p>
+            </div>
+
+            <aside class="proj-facts">
+              <h2 class="proj-facts-h">At a glance</h2>
+              <dl class="proj-dl">
+                <dt>Role</dt><dd>Sole author</dd>
+                <dt>Type</dt><dd>Quantitative finance project</dd>
+                <dt>Universe</dt><dd>13 stocks, benchmarked vs. SPY</dd>
+                <dt>Methods</dt><dd>Mean-variance, CAPM, Treynor-Black</dd>
+                <dt>Result</dt><dd>Annualized Sharpe &gt; 1.18</dd>
+              </dl>
+              <a class="pill dark proj-cta" href="../../assets/Markowitz%20Analysis%20.xlsx" download>Download the model ↓</a>
+            </aside>
+          </div>
+        </section>
+      </div>
+
+      <div class="wrap">
+        <nav class="proj-next" aria-label="More projects">
+          <a class="proj-next-link" href="../sowin/index.html">
+            <span class="proj-next-dir">← previous</span>
+            <span class="proj-next-name">Sowin</span>
+          </a>
+          <a class="proj-next-link is-next" href="../portal-card/index.html">
+            <span class="proj-next-dir">next →</span>
+            <span class="proj-next-name">Portal Card</span>
+          </a>
+        </nav>
+      </div>
+
+      <footer class="foot">
+        <div class="foot-in">
+          <span>© 2026 alex</span>
+          <nav class="foot-links" aria-label="Footer">
+            <a href="../../index.html">home</a>
+            <a href="../index.html">work</a>
+            <a href="../../experience/index.html">experience</a>
+            <a href="../../contact/index.html">contact</a>
+          </nav>
+          <span>built with the web animations api</span>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <script src="../../script.js"></script>
+</body>
+</html>

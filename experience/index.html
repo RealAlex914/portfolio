@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>experience · alex</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="locked">
+
+  <div class="welcome show" id="welcome" aria-hidden="true">
+    <div class="welcome-inner">
+      <span class="w-small" id="wSmall">welcome to</span>
+      <span class="w-big" id="wBig">here's <span class="cycle">alex</span></span>
+      <span class="w-hint" id="wHint">scroll to enter&nbsp;↓</span>
+    </div>
+  </div>
+
+  <main class="site" id="site" aria-hidden="true">
+
+    <header class="nav" id="nav">
+      <div class="nav-in">
+        <a class="logo" href="../index.html">alex</a>
+        <nav class="nav-links" aria-label="Main">
+          <a href="../index.html">home</a>
+          <a href="../work/index.html">work</a>
+          <a href="index.html" class="is-current" aria-current="page">experience</a>
+          <a href="../contact/index.html">contact</a>
+        </nav>
+        <div class="nav-right">
+          <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="4.9" y1="4.9" x2="6.4" y2="6.4"/><line x1="17.6" y1="17.6" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="6.4" y2="17.6"/><line x1="17.6" y1="6.4" x2="19.1" y2="4.9"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <aside class="hud" id="hud" aria-hidden="true">
+      <div class="hud-row">
+        <span class="hud-dot"></span>
+        <span class="hud-live">LIVE</span>
+        <span class="hud-time" id="hudTime">00:00</span>
+      </div>
+      <p class="hud-since">since you arrived, alex has</p>
+      <p class="hud-metric"><span class="hud-count" id="hudCount">0</span><span class="hud-label" id="hudLabel">ideas sketched</span></p>
+    </aside>
+
+    <div class="smooth-content" id="smoothContent">
+
+      <section class="page-hero">
+        <div class="wrap">
+          <p class="hero-kicker" data-reveal style="--dx:0">02 · experience</p>
+          <h1 class="page-title" data-reveal style="--dx:0">Where I've worked</h1>
+          <p class="page-sub" data-reveal style="--dx:0">Three résumé versions below — pick the one that fits what you're hiring for.</p>
+        </div>
+      </section>
+
+      <div class="wrap">
+        <section class="story">
+          <article class="panel panel-exp" data-reveal style="--dx:-90px">
+            <!-- LEFT: sleek clickable resume preview with version tabs -->
+            <div class="exp-resume">
+              <!-- pick a résumé version; edit data-file / data-download to add your own -->
+              <div class="resume-tabs" id="resumeTabs" role="tablist" aria-label="Choose a résumé version">
+                <button class="resume-tab is-active" role="tab" aria-selected="true"
+                        data-file="../assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf"
+                        data-download="Alex_Mohammed_Finance_Resume.pdf">Finance</button>
+                <button class="resume-tab" role="tab" aria-selected="false"
+                        data-file="../assets/Marketing_Resume.pdf"
+                        data-download="Alex_Mohammed_Marketing_Resume.pdf">Marketing</button>
+                <button class="resume-tab" role="tab" aria-selected="false"
+                        data-file="../assets/Data_Resume.pdf"
+                        data-download="Alex_Mohammed_Data_Resume.pdf">Data Science</button>
+              </div>
+
+              <a class="resume-frame" id="resumeFrame" href="../assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf" target="_blank" rel="noopener" aria-label="Open résumé in a new tab">
+                <span class="resume-crop" id="resumeCrop">
+                  <object class="resume-doc" data="../assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&view=FitH" type="application/pdf">
+                    <span class="resume-fallback">
+                      <span class="resume-fallback-ic">📄</span>
+                      <span>Drop this résumé in as a PDF (in the site folder) and it'll preview right here.</span>
+                    </span>
+                  </object>
+                </span>
+                <span class="resume-overlay"><span class="resume-cta">View résumé ↗</span></span>
+              </a>
+              <div class="resume-actions">
+                <a class="pill" id="resumeDownload" href="../assets/JPMC_Alex_Mohammed_Resume%20%282%29.pdf" download="Alex_Mohammed_Finance_Resume.pdf">Download résumé ↓</a>
+              </div>
+            </div>
+
+            <!-- RIGHT: experience copy -->
+            <div class="exp-copy">
+              <span class="tl-year">02 · experience</span>
+              <h2 class="panel-title">Experience</h2>
+              <ul class="tl-list">
+                <li><span>2026 —</span> Founder · Sowin</li>
+                <li><span>2026 —</span> Incoming Analyst · Wayfair</li>
+                <li><span>2025 —</span> Marketing Manager · CSDS, Northeastern</li>
+                <li><span>2023 —</span> Student Body President · SGA Northeastern</li>
+                <li><span>2021 —</span> Founder · Alex's Eatery</li>
+              </ul>
+              <p class="tl-text">Founder at heart — from a 5k-MRR baked-goods business to 700k+ monthly organic impressions in marketing, now building a Christian social platform and joining Wayfair as an analyst.</p>
+            </div>
+          </article>
+        </section>
+      </div>
+
+      <div class="wrap">
+        <section class="cta-band" data-reveal style="--dx:0">
+          <h2 class="cta-title">The work itself</h2>
+          <p class="cta-sub">Startups, hackathon wins, and quant projects — each with its own page.</p>
+          <a class="pill dark" href="../work/index.html">See all work →</a>
+        </section>
+      </div>
+
+      <footer class="foot">
+        <div class="foot-in">
+          <span>© 2026 alex</span>
+          <nav class="foot-links" aria-label="Footer">
+            <a href="../index.html">home</a>
+            <a href="../work/index.html">work</a>
+            <a href="index.html">experience</a>
+            <a href="../contact/index.html">contact</a>
+          </nav>
+          <span>built with the web animations api</span>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <script src="../script.js"></script>
+</body>
+</html>

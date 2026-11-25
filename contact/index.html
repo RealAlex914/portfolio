@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>contact · alex</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="locked">
+
+  <div class="welcome show" id="welcome" aria-hidden="true">
+    <div class="welcome-inner">
+      <span class="w-small" id="wSmall">welcome to</span>
+      <span class="w-big" id="wBig">here's <span class="cycle">alex</span></span>
+      <span class="w-hint" id="wHint">scroll to enter&nbsp;↓</span>
+    </div>
+  </div>
+
+  <main class="site" id="site" aria-hidden="true">
+
+    <header class="nav" id="nav">
+      <div class="nav-in">
+        <a class="logo" href="../index.html">alex</a>
+        <nav class="nav-links" aria-label="Main">
+          <a href="../index.html">home</a>
+          <a href="../work/index.html">work</a>
+          <a href="../experience/index.html">experience</a>
+          <a href="index.html" class="is-current" aria-current="page">contact</a>
+        </nav>
+        <div class="nav-right">
+          <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="4.9" y1="4.9" x2="6.4" y2="6.4"/><line x1="17.6" y1="17.6" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="6.4" y2="17.6"/><line x1="17.6" y1="6.4" x2="19.1" y2="4.9"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <aside class="hud" id="hud" aria-hidden="true">
+      <div class="hud-row">
+        <span class="hud-dot"></span>
+        <span class="hud-live">LIVE</span>
+        <span class="hud-time" id="hudTime">00:00</span>
+      </div>
+      <p class="hud-since">since you arrived, alex has</p>
+      <p class="hud-metric"><span class="hud-count" id="hudCount">0</span><span class="hud-label" id="hudLabel">ideas sketched</span></p>
+    </aside>
+
+    <div class="smooth-content" id="smoothContent">
+
+      <section class="page-hero">
+        <div class="wrap">
+          <p class="hero-kicker" data-reveal style="--dx:0">07 · contact</p>
+          <h1 class="page-title" data-reveal style="--dx:0">Let's Connect</h1>
+          <p class="page-sub" data-reveal style="--dx:0">Always up for a conversation — about building, brand, data, or what's next.</p>
+        </div>
+      </section>
+
+      <div class="wrap">
+        <section class="contact-wrap">
+          <article class="tl-box contact-card" data-reveal style="--dx:0">
+            <span class="tl-year">say hello</span>
+            <h2 class="tl-title">Let's Connect</h2>
+            <p class="tl-text"><a class="contact-mail" href="mailto:mohammed.al@northeastern.edu">mohammed.al@northeastern.edu</a></p>
+            <div class="socials"><span></span><span></span><span></span><span></span></div>
+            <a class="pill dark" href="https://dot.cards/alexmohammed" target="_blank" rel="noopener">Get in touch ↗</a>
+          </article>
+        </section>
+      </div>
+
+      <div class="wrap">
+        <section class="cta-band" data-reveal style="--dx:0">
+          <h2 class="cta-title">Or start with the work</h2>
+          <p class="cta-sub">Four projects, each with its own page.</p>
+          <a class="pill dark" href="../work/index.html">See all work →</a>
+        </section>
+      </div>
+
+      <footer class="foot">
+        <div class="foot-in">
+          <span>© 2026 alex</span>
+          <nav class="foot-links" aria-label="Footer">
+            <a href="../index.html">home</a>
+            <a href="../work/index.html">work</a>
+            <a href="../experience/index.html">experience</a>
+            <a href="index.html">contact</a>
+          </nav>
+          <span>built with the web animations api</span>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <script src="../script.js"></script>
+</body>
+</html>

@@ -74,11 +74,16 @@ revealEls.forEach((el, i) => {
   else dx = i % 2 === 0 ? -SLIDE : SLIDE; // hero: gentle alternation
   el.style.setProperty("--dx", dx + "px");
 });
-// small stagger down the hero
-document.querySelectorAll(".hero [data-reveal]").forEach((el, i) => el.style.setProperty("--i", i));
+// small stagger down the hero (home) or the page header (every sub-page)
+document
+  .querySelectorAll(".hero [data-reveal], .page-hero [data-reveal]")
+  .forEach((el, i) => el.style.setProperty("--i", i));
 
 /* ---------- intro: welcome splash → swipe into the site ---------- */
+// Runs on every page, every load — each page carries its own copy of the splash
+// markup. To show it only once per visit instead, gate this on sessionStorage.
 async function startIntro() {
+  if (!welcome || !site) { revealSite(); return; }
   if (reduceMotion) {
     welcome.classList.remove("show");
     welcome.style.display = "none";
@@ -93,7 +98,7 @@ startIntro();
 
 /* ---------- WAAPI welcome intro (does NOT auto-advance) ---------- */
 async function playWelcome() {
-  [welcome, wSmall, wBig, wHint].forEach((el) => el.getAnimations().forEach((a) => a.cancel()));
+  [welcome, wSmall, wBig, wHint].forEach((el) => el && el.getAnimations().forEach((a) => a.cancel()));
   welcome.style.transform = "";
   welcome.style.display = "";
   welcome.classList.add("show");
@@ -168,6 +173,7 @@ let sc = 0; // smoothed scroll position
 
 function revealSite() {
   document.body.classList.remove("locked"); // release scroll now that the site is showing
+  if (!site) return;
   site.setAttribute("aria-hidden", "false");
   site.classList.add("reveal");
   window.scrollTo(0, 0);
@@ -186,6 +192,7 @@ function enterVideosSoon() {
 }
 
 function enableSmooth() {
+  if (!smoothContent) { smoothing = false; return; }
   smoothing = !reduceMotion && !isTouch;
   if (smoothing) {
     smoothContent.classList.add("smoothing");
@@ -199,10 +206,18 @@ function enableSmooth() {
 }
 
 function setBodyHeight() {
-  if (!smoothing) return;
+  if (!smoothing || !smoothContent) return;
   document.body.style.height = smoothContent.getBoundingClientRect().height + "px";
 }
 window.addEventListener("resize", () => { if (siteActive) setBodyHeight(); });
+
+// Content height isn't final at reveal time — images, PDFs and videos settle
+// later, and the project pages are image-heavy. Without this the scrollable
+// height stays stuck at the pre-load value and the footer is unreachable.
+if (smoothContent && "ResizeObserver" in window) {
+  new ResizeObserver(() => { if (siteActive) setBodyHeight(); }).observe(smoothContent);
+}
+window.addEventListener("load", () => { if (siteActive) setBodyHeight(); });
 
 /* ---------- the one loop: smooth scroll + reveals + timeline ---------- */
 function loop() {
@@ -295,6 +310,7 @@ function hudPing() {
 }
 
 function startHud() {
+  if (!hud) return;
   try { localStorage.removeItem("alexArrivedAt"); } catch (e) {}   // drop the old wall-clock key
   let saved = NaN;
   try { saved = parseFloat(localStorage.getItem(HUD_KEY)); } catch (e) {}
@@ -308,6 +324,7 @@ function startHud() {
   hudPing();                  // they just scrolled in — begin counting
 }
 function stopHud() {
+  if (!hud) return;
   hud.classList.remove("show");
   hud.setAttribute("aria-hidden", "true");
   clearTimeout(hudIdleTimer);
@@ -335,6 +352,7 @@ function fmtTime(sec) {
 
 function updateHud() {
   if (!hudActive || !hudSessionStart) return;   // not started, or paused (tab hidden)
+  if (!hudTime || !hudCount || !hudLabel) return;
   const elapsed = hudElapsed();
   const sec = Math.floor(elapsed);
   if (sec === hudLastSec) return; // only touch the DOM once per second
