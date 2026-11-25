@@ -25,18 +25,22 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # Keep these on current majors. GitHub retired the Node 20 runner, which
+      # forced the older action versions onto Node 24 and broke the handoff
+      # between upload-pages-artifact and deploy-pages ("No artifacts named
+      # github-pages were found"). Pinning further back will start failing again.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           # the whole repo root is the site (index.html lives here)
           path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
