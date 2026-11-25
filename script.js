@@ -104,7 +104,11 @@ async function startIntro() {
   await waitForGesture();
   await swipeIntoSite();
 }
-startIntro();
+// NOTE: startIntro() is kicked off at the very bottom of this file, not here.
+// When the splash is skipped it calls revealSite() synchronously, which touches
+// the `sc` / `siteActive` / `smoothing` bindings declared further down — running
+// it from this point throws a temporal-dead-zone ReferenceError and leaves every
+// [data-reveal] block stuck at opacity 0.
 
 /* ---------- WAAPI welcome intro (does NOT auto-advance) ---------- */
 async function playWelcome() {
@@ -428,3 +432,9 @@ function updateHud() {
     if (btn) select(btn);
   });
 })();
+
+/* ---------- kick everything off ----------
+   Last line on purpose. On pages where the splash is skipped (every navigation
+   after the first), startIntro() reveals the site synchronously, so every
+   binding and the ResizeObserver above must already exist by the time it runs. */
+startIntro();
