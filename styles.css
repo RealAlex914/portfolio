@@ -138,6 +138,13 @@ html:has(body.locked) { overflow: hidden; }
   opacity: 0;
 }
 .welcome.show { display: grid; opacity: 1; }
+/* splash already played this visit (set in each page's <head> before first
+   paint) — keep it out of the layout entirely so navigation never flashes it */
+:root.no-splash .welcome,
+:root.no-splash .welcome.show { display: none; }
+/* ...and don't let the markup's scroll lock bite before script.js unlocks it */
+:root.no-splash body.locked { overflow: visible; height: auto; }
+:root.no-splash:has(body.locked) { overflow: visible; }
 .welcome-inner { text-align: center; }
 .w-small {
   display: block;

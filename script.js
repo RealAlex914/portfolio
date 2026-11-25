@@ -80,11 +80,21 @@ document
   .forEach((el, i) => el.style.setProperty("--i", i));
 
 /* ---------- intro: welcome splash → swipe into the site ---------- */
-// Runs on every page, every load — each page carries its own copy of the splash
-// markup. To show it only once per visit instead, gate this on sessionStorage.
+// The splash plays once per visit, not once per page. Each page's <head> checks
+// this same key before first paint and sets .no-splash, which is what actually
+// prevents the flash — this flag just mirrors that decision for the JS path.
+// sessionStorage (not localStorage) so closing the tab arms the intro again.
+const SPLASH_KEY = "alexSplashSeen";
+const splashSeen = document.documentElement.classList.contains("no-splash");
+
+function markSplashSeen() {
+  try { sessionStorage.setItem(SPLASH_KEY, "1"); } catch (e) {}
+  document.documentElement.classList.add("no-splash");
+}
+
 async function startIntro() {
   if (!welcome || !site) { revealSite(); return; }
-  if (reduceMotion) {
+  if (splashSeen || reduceMotion) {
     welcome.classList.remove("show");
     welcome.style.display = "none";
     revealSite();
@@ -157,6 +167,7 @@ async function swipeIntoSite() {
   welcome.style.display = "none";
   welcome.getAnimations().forEach((a) => a.cancel());
 
+  markSplashSeen();   // they're in — every later page this visit skips the intro
   document.body.classList.remove("locked");
   window.scrollTo(0, 0);
   sc = 0;
@@ -172,6 +183,7 @@ let smoothing = false;
 let sc = 0; // smoothed scroll position
 
 function revealSite() {
+  markSplashSeen();                         // covers the reduced-motion / already-seen paths
   document.body.classList.remove("locked"); // release scroll now that the site is showing
   if (!site) return;
   site.setAttribute("aria-hidden", "false");

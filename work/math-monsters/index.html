@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Math Monsters · alex</title>
   <link rel="stylesheet" href="../../styles.css" />
+  <script>
+    /* Decide BEFORE first paint whether the splash runs, so moving between pages
+       never flashes it. Inline and in <head> on purpose — an external file would
+       load too late to beat the paint. Paired with :root.no-splash in styles.css. */
+    try {
+      if (sessionStorage.getItem("alexSplashSeen") === "1") {
+        document.documentElement.classList.add("no-splash");
+      }
+    } catch (e) {}
+  </script>
 </head>
 <body class="locked">
 
